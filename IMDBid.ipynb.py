@@ -1,5 +1,7 @@
-movie_id_list = ["tt0381061", "tt0482571", "tt1232829", "tt1853728", "tt0993846", "tt0314331", "tt0362227", "tt0446029", "tt1631867",
-"tt0841032",
+import requests
+from pprint import pprint
+
+movies = ["tt0381061", "tt0482571", "tt1232829", "tt1853728", "tt0993846", "tt0314331", "tt0362227", "tt0446029", "tt1631867","tt0841032",
 "tt0266543",
 "tt0371746",
 "tt1219827",
@@ -190,10 +192,36 @@ movie_id_list = ["tt0381061", "tt0482571", "tt1232829", "tt1853728", "tt0993846"
 "tt0405508",
 "tt0448134",
 "tt0462396"]
+movie_data = []
 
-x = len(movie_id_list)
+url = "https://movie-database-alternative.p.rapidapi.com/"
 
-print(x)
+headers = {
+    "X-RapidAPI-Key": "38565ed214msh308e11f3b916074p16b6fcjsn9b77ef6aeb70",
+    "X-RapidAPI-Host": "movie-database-alternative.p.rapidapi.com"
+}
+
+for movie in movies:
+    querystring = {"r":"json","i":movie}
+    response = requests.get(url, headers=headers, params=querystring).json()
+    
+    title = response['Title']
+    year = response['Year']
+    runtime = response['Runtime']
+    box_office = response['BoxOffice']
+    awards_rough = response['Awards']
+    ratings_rough = response['Ratings']
+    
+    awards_rough = awards_rough.split(". ")
+    if "wins" in awards_rough[1]:
+        wins, noms = awards_rough[1].split(" wins")
+        noms = noms.split("& ")
+        noms = noms[1].split(" nominations")[0]
+    else:
+        wins = 0
+        noms = awards_rough[1].split(" wins")
+    noms = int(noms)
+    wins = int(wins)
 
 
 
