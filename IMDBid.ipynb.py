@@ -1,5 +1,6 @@
 import requests
 from pprint import pprint
+import re
 
 movies = ["tt0381061", "tt0482571", "tt1232829", "tt1853728", "tt0993846", "tt0314331", "tt0362227", "tt0446029", "tt1631867","tt0841032",
 "tt0266543",
@@ -211,18 +212,12 @@ for movie in movies:
     box_office = response['BoxOffice']
     awards_rough = response['Awards']
     ratings_rough = response['Ratings']
+
+    print(response["Ratings"])
     
-    awards_rough = awards_rough.split(". ")
-    if "wins" in awards_rough[1]:
-        wins, noms = awards_rough[1].split(" wins")
-        noms = noms.split("& ")
-        noms = noms[1].split(" nominations")[0]
+    nums = re.findall(r'\d+', awards_rough)
+    noms = nums[len(nums)-1]
+    if len(nums) > 1:
+        wins = nums[len(nums)-2]
     else:
         wins = 0
-        noms = awards_rough[1].split(" wins")
-    noms = int(noms)
-    wins = int(wins)
-
-
-
-
