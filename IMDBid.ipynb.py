@@ -205,38 +205,40 @@ headers = {
 
 for movie in movies:
     querystring = {"r":"json","i":movie}
-    response = requests.get(url, headers=headers, params=querystring).json()
-    
-    title = response['Title']
-    year = response['Year']
-    runtime = response['Runtime']
-    box_office = response['BoxOffice']
-    awards_rough = response['Awards']
-    ratings_rough = response['Ratings']
 
-    imdb = ratings_rough[0]["Value"]
-    if len(ratings_rough) > 2:
+    try:
+        response = requests.get(url, headers=headers, params=querystring).json()
+    
+        title = response['Title']
+        year = response['Year']
+        runtime = response['Runtime']
+        box_office = response['BoxOffice']
+        awards_rough = response['Awards']
+        ratings_rough = response['Ratings']
+
+        imdb = ratings_rough[0]["Value"]
         rotten_tomatoes = ratings_rough[1]["Value"]
         metacritic = ratings_rough[2]["Value"]
-    else:
-        metacritic = ratings_rough[1]["Value"]
     
-    nums = re.findall(r'\d+', awards_rough)
-    noms = int(nums[len(nums)-1])
-    if len(nums) > 1:
-        wins = int(nums[len(nums)-2])
-    else:
-        wins = 0
+        nums = re.findall(r'\d+', awards_rough)
+        noms = int(nums[len(nums)-1])
+        if len(nums) > 1:
+            wins = int(nums[len(nums)-2])
+        else:
+            wins = 0
 
-    movie_data.append({"Title": title,
-                      "Year": year,
-                      "Runtime": runtime,
-                      "Box Office": box_office,
-                      "IMDb": imdb,
-                      "Rotten Tomatoes": rotten_tomatoes,
-                      "Metacritic": metacritic,
-                      "Nominations": noms,
-                      "Wins": wins,})
+        movie_data.append({"Title": title,
+                        "Year": year,
+                        "Runtime": runtime,
+                        "Box Office": box_office,
+                        "IMDb": imdb,
+                        "Rotten Tomatoes": rotten_tomatoes,
+                        "Metacritic": metacritic,
+                        "Nominations": noms,
+                        "Wins": wins,})
+    except:
+        print("Movie not found. Skipping...")
+        pass
     
 movie_data_df = pd.DataFrame(movie_data)
 movie_data_df.head()
