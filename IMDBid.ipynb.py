@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 from pprint import pprint
 import re
 
@@ -213,11 +214,29 @@ for movie in movies:
     awards_rough = response['Awards']
     ratings_rough = response['Ratings']
 
-    print(response["Ratings"])
+    imdb = ratings_rough[0]["Value"]
+    if len(ratings_rough) > 2:
+        rotten_tomatoes = ratings_rough[1]["Value"]
+        metacritic = ratings_rough[2]["Value"]
+    else:
+        metacritic = ratings_rough[1]["Value"]
     
     nums = re.findall(r'\d+', awards_rough)
-    noms = nums[len(nums)-1]
+    noms = int(nums[len(nums)-1])
     if len(nums) > 1:
-        wins = nums[len(nums)-2]
+        wins = int(nums[len(nums)-2])
     else:
         wins = 0
+
+    movie_data.append({"Title": title,
+                      "Year": year,
+                      "Runtime": runtime,
+                      "Box Office": box_office,
+                      "IMDb": imdb,
+                      "Rotten Tomatoes": rotten_tomatoes,
+                      "Metacritic": metacritic,
+                      "Nominations": noms,
+                      "Wins": wins,})
+    
+movie_data_df = pd.DataFrame(movie_data)
+movie_data_df.head()
