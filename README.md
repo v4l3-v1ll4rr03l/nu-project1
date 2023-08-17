@@ -12,4 +12,6 @@
 - Scrapped Visualizations (FOLDER, _contents can and should be ignored_): This folder contains visualizations which were added at early stage in the project
 
 ## Credits
+- We used [Movie Database Alternative](https://rapidapi.com/rapidapi/api/movie-database-alternative) through Rapid API to obtain out data.
+- Chat GPT was used to generate our list of 500 movie IMDb ID's.
 - We used [this Slides Carnival template](https://www.slidescarnival.com/design/guess-the-movie/35714) for our presentation.
